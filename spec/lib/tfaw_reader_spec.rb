@@ -9,7 +9,20 @@ describe TfawReader, "when reading next week's entries" do
     FakeWeb.register_uri(:get, "http://www.tfaw.com/Arriving-This-Week/Search/_results_adultfilter_search=T/_results_available_search=allnobackorder/_results_end_date_search=3%2Bdays/_results_limit_search=30/_results_order_search=title/_results_ordercombo_search=title_asc/_results_start_at_search=60/_results_start_date_search=-4%2Bdays", :body => File.open("./spec/lib/tfaw_page_3.html", "rb").read)
 
     @reader = TfawReader.new
-    @titles = @reader.titles
+    @comics = @reader.comics
+  end
+
+  it "should get the image url, too" do
+    expected = [
+      'http://images.tfaw.com/covers_tfaw/100/ju/jul110509.jpg',
+      'http://images.tfaw.com/covers_tfaw/100/ma/may110488.jpg',
+      'http://images.tfaw.com/covers_tfaw/100/ju/jun110906.jpg',
+    ]
+
+    urls = @comics.collect{|c| c.image_url}
+    expected.each do |url|
+      urls.should include url
+    end
   end
 
   it "should list the current titles" do
@@ -24,14 +37,15 @@ describe TfawReader, "when reading next week's entries" do
       'Giant Size Little Lulu Vol. 4 TPB',
       'Infamous #2 Lindsay Lohan',
     ]
-    
+
+    titles = @comics.collect{|c| c.title}
     expected.each do |title|
-      @titles.should include title
+      titles.should include title
     end
   end
 
   it "should list all the things, across pages" do
-    @titles.should have(90).things
+    @comics.should have(90).things
   end
 
 end
