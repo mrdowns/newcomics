@@ -1,0 +1,6 @@
+<h1>New Comics</h1>
+<ul>
+  <% @comics.each do |comic| %>
+    <li><img alt="<%= comic.title %>" src="<%= comic.large_image_url %>" /></li>
+  <% end %>
+</ul>

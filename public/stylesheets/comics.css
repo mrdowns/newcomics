@@ -1,0 +1,5 @@
+body { background-color: #eee; }
+h1 {display:none;}
+ul { list-style-type: none; margin: 0; }
+li { float: left; margin: 1px; }
+li img { width: 200px; height: 304px; }
