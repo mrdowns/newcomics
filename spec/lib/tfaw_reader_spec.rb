@@ -12,6 +12,56 @@ describe TfawReader, "when reading next week's entries" do
     @comics = @reader.comics
   end
 
+  it "should populate all the things" do
+    expected = [
+      Comic.new do 
+        @title = '50 Girls 50 #4 (of 4)'
+        @image_url = 'http://images.tfaw.com/covers_tfaw/100/ju/jul110509.jpg'
+        @large_image_url = 'http://images.tfaw.com/covers_tfaw/200/ju/jul110509.jpg' 
+        @publisher = 'Image Comics'
+      end,
+      Comic.new do 
+        @title = '68 (Sixty Eight) #4 (of 4) (Cover A - Nat Jones & Jay Fotos)'
+        @image_url = 'http://images.tfaw.com/covers_tfaw/100/ma/may110488.jpg'
+        @large_image_url = 'http://images.tfaw.com/covers_tfaw/200/ma/may110488.jpg' 
+        @publisher = 'Image Comics'
+      end,
+      Comic.new do 
+        @title = 'Comics #2 Lucille Ball'
+        @image_url = 'http://images.tfaw.com/covers_tfaw/100/ju/jun110906.jpg'
+        @large_image_url = 'http://images.tfaw.com/covers_tfaw/200/ju/jun110906.jpg' 
+        @publisher = 'Bluewater Productions'
+      end,
+    ]
+
+    expected.each do |comic|
+      scraped = @comics.select { |c| c.title == comic.title }
+      scraped.length.should eq(1)
+      scraped[0].title.should eq(comic.title)
+      scraped[0].image_url.should eq(comic.image_url)
+      scraped[0].large_image_url.should eq(comic.large_image_url)
+      scraped[0].publisher.should eq(comic.publisher)
+    end
+  end
+
+  it "shouldn't return a publisher for entries that don't have one" do
+    comic = @comics.select { |c| c.title == "Clint #11" }
+    comic.first.publisher.should eq('')
+  end
+
+  it "should figure out the large image url" do
+    expected = [
+      'http://images.tfaw.com/covers_tfaw/200/ju/jul110509.jpg',
+      'http://images.tfaw.com/covers_tfaw/200/ma/may110488.jpg',
+      'http://images.tfaw.com/covers_tfaw/200/ju/jun110906.jpg',
+    ]
+
+    urls = @comics.collect{|c| c.large_image_url}
+    expected.each do |url|
+      urls.should include url
+    end
+  end
+
   it "should get the image url, too" do
     expected = [
       'http://images.tfaw.com/covers_tfaw/100/ju/jul110509.jpg',

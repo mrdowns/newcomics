@@ -1,6 +1,10 @@
-<ul>
+<ul class="sort">
+  <li>A-Z</li>
+  <li>Publisher</li>
+</ul>
+<ul class="comics">
   <% @comics.each do |comic| %>
-    <li>
+    <li data-publisher="<%= comic.publisher %>">
       <img alt="<%= comic.title %>" src="<%= comic.large_image_url %>" />
       <div class="title"><%= comic.title %></div>
     </li>

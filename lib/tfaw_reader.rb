@@ -41,21 +41,32 @@ class TfawReader
   end
 
   def add_books(doc)
-    #results = doc.css("#results_form table a.boldlink img")
     results = doc.css("#results_form > table > tr")
     values = []
     results.each do |r|
       images = r.css("a.boldlink img.cover-image")
       next if images.nil? or images.length < 1
+      publisher = parse_publisher(r)
 
       img = images.first
-      comic = Comic.new
-      comic.title = img["alt"]
-      comic.image_url = img["src"]
+      comic = Comic.new do
+        @title = img["alt"]
+        @image_url = img["src"]
+        @large_image_url = img["src"].sub("/100/", "/200/")
+        @publisher = publisher
+      end
       values << comic
     end
-    #values = results.collect { |link| link["alt"] }
     @comics.concat(values)
+  end
+
+  def parse_publisher(table_row)
+    publisher_element = table_row.css("td:nth-child(3) div:nth-child(2) i")
+    return '' if publisher_element.nil? || publisher_element.length == 0
+    #if there's a publisher, it'll have a semicolon. If there is none,
+    #publisher is empty
+    return '' if !publisher_element.first.text.include? ";"
+    publisher_element.first.text[/^[^;]+/, 0]
   end
 
 end

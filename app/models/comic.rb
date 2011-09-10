@@ -1,7 +1,9 @@
 class Comic
-  attr_accessor :title, :image_url
+  attr_accessor :title, :image_url, :large_image_url, :publisher
 
-  def large_image_url
-    image_url.sub("/100/", "/200/")
+  def initialize(&block)
+    if block_given?
+      instance_eval(&block)
+    end
   end
 end

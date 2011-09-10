@@ -11,5 +11,7 @@ require 'spec_helper'
 #   end
 # end
 describe ComicsHelper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it "should do nothing" do
+    true.should eq(true)
+  end
 end
