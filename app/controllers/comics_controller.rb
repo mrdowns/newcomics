@@ -1,8 +1,8 @@
-require 'tfaw_reader'
+require 'comixology_reader'
 
 class ComicsController < ApplicationController
   def index
-    reader = TfawReader.new
+    reader = ComixologyReader.new
     @comics = reader.comics
   end
 end
