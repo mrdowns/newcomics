@@ -69,10 +69,10 @@ class ComixologyReader
   def parse_large_image_url(result_element)
     img_element = result_element.css('td#image > a > img').first
     return '' if img_element.nil?
+
     src = img_element["src"]
-    if(src =~ /no-image\.gif/) do
-      return "http://cdn.comixology.com/midsize/no-image.gif"
-    end
+    return "http://cdn.comixology.com/midsize/no-image.gif" if src =~ /no-image\.gif/ 
+
     src =~ /cdn\.comixology\.com\/(\w+)\/(\w+)\/thumbnails\/(\w+)_t\.jpg/
     year = $1
     monthday = $2
